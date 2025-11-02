@@ -13,6 +13,11 @@ function loadStorage() {
     const todoData = JSON.parse(localStorage.getItem('myTodos')) || [];
     todoArray = todoData.map(Todo.fromJSON);
 
+    if (todoArray.length === 0) {
+        todoArray = [new Todo('Example todo', 'date', 'high', ['shopping', 'work'], null)];
+        saveStorage();
+    }
+
     const projectData = JSON.parse(localStorage.getItem('myProjects')) || [];
     projectsArray = projectData.map(Project.fromJSON);
 }

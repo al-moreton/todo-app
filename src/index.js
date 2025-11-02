@@ -1,5 +1,5 @@
-import { Todo } from './todo-note';
-import { Project } from './project';
-import { loadStorage } from './storage';
+import { TodoApp } from './app-ui';
 
-loadStorage();
+const todoApp = new TodoApp();
+todoApp.init();
+
