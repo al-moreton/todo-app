@@ -1,25 +1,27 @@
-import { Todo } from './todo-note';
-import { Project } from './project';
+import {Todo} from "./todo-note";
+import {Project} from "./project";
 
 let todoArray = [];
-let projectsArray = []
+let projectsArray = [];
 
 function saveStorage() {
-    localStorage.setItem('myTodos', JSON.stringify(todoArray));
-    localStorage.setItem('myProjects', JSON.stringify(projectsArray));
+    localStorage.setItem("myTodos", JSON.stringify(todoArray));
+    localStorage.setItem("myProjects", JSON.stringify(projectsArray));
 }
 
 function loadStorage() {
-    const todoData = JSON.parse(localStorage.getItem('myTodos')) || [];
+    const todoData = JSON.parse(localStorage.getItem("myTodos")) || [];
     todoArray = todoData.map(Todo.fromJSON);
 
     if (todoArray.length === 0) {
-        todoArray = [new Todo('Example todo', 'date', 'high', ['shopping', 'work'], null)];
+        todoArray = [
+            new Todo("Example todo", "date", "high", ["shopping", "work"], null),
+        ];
         saveStorage();
     }
 
-    const projectData = JSON.parse(localStorage.getItem('myProjects')) || [];
+    const projectData = JSON.parse(localStorage.getItem("myProjects")) || [];
     projectsArray = projectData.map(Project.fromJSON);
 }
 
-export { todoArray, projectsArray, saveStorage, loadStorage };
+export {todoArray, projectsArray, saveStorage, loadStorage};

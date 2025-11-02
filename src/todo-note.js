@@ -1,7 +1,13 @@
-import { todoArray, projectsArray, saveStorage, loadStorage } from './storage';
+import {todoArray, projectsArray, saveStorage, loadStorage} from "./storage";
 
 class Todo {
-    constructor(text, dueDate = null, priority = null, labels = [], projectId = null) {
+    constructor(
+        text,
+        dueDate = null,
+        priority = null,
+        labels = [],
+        projectId = null,
+    ) {
         this.id = crypto.randomUUID();
         this.text = text;
         this.dueDate = dueDate;
@@ -20,16 +26,21 @@ class Todo {
             labels: this.labels,
             projectId: this.projectId,
             completed: this.completed,
-        }
+        };
     }
 
     static fromJSON(obj) {
-        const n = new Todo(obj.text, obj.dueDate, obj.priority, obj.labels, obj.projectId);
+        const n = new Todo(
+            obj.text,
+            obj.dueDate,
+            obj.priority,
+            obj.labels,
+            obj.projectId,
+        );
         n.id = obj.id;
         n.completed = obj.completed;
         return n;
     }
-
 }
 
-export { Todo };
+export {Todo};
