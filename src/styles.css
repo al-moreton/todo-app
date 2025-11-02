@@ -1,0 +1,31 @@
+/*Todo card*/
+.todo-card {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+}
+
+.todo-title {
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.todo-label {
+    font-size: 0.9rem;
+    margin-right: 5px;
+    background-color: #e8e8e8;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.todo-priority.high {
+    color: red;
+}
+
+.todo-priority.medium {
+    color: orange;
+}
+
+.todo-priority.low {
+    color: green;
+}

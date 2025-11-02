@@ -15,7 +15,7 @@ function loadStorage() {
 
     if (todoArray.length === 0) {
         todoArray = [
-            new Todo("Example todo", "date", "high", ["shopping", "work"], null),
+            new Todo("Example todo", new Date(), "high", ["shopping", "work"], null),
         ];
         saveStorage();
     }
