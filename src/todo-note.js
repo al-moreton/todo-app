@@ -8,13 +8,17 @@ class Todo {
         labels = [],
         projectId = null,
     ) {
-        this.id = crypto.randomUUID();
+        this.id = this.getID();
         this.text = text;
         this.dueDate = dueDate;
         this.priority = priority;
         this.labels = labels;
         this.projectId = projectId;
         this.completed = false;
+    }
+
+    getID() {
+        return `TODO${(todoArray.length + 1).toString().padStart(3, '0')}`;
     }
 
     toJSON() {

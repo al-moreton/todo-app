@@ -1,5 +1,6 @@
 import {todoArray, projectsArray, saveStorage, loadStorage} from './storage';
 import {Todo} from './todo-note';
+import {buildForm} from "./add-todo";
 
 class TodoApp {
     constructor() {
@@ -19,8 +20,8 @@ class TodoApp {
         addTodoBtn.textContent = 'Add Todo';
 
         addTodoBtn.addEventListener('click', (e) => {
-            this.handleAddTodo(e);
-            this.loadTodos();
+            this.modal = buildForm(() => this.loadTodos());
+            this.modal.showModal();
         });
 
         container.appendChild(addTodoBtn);
@@ -28,19 +29,6 @@ class TodoApp {
         const todoList = document.createElement('div');
         todoList.classList.add('todo-list');
         container.appendChild(todoList);
-    }
-
-    // TODO add form
-    handleAddTodo(e) {
-        const newTodo = new Todo(
-            'test',
-            'date',
-            'high',
-            ['shopping', 'work'],
-            null,
-        );
-        todoArray.push(newTodo);
-        saveStorage();
     }
 
     loadTodos() {
@@ -53,30 +41,48 @@ class TodoApp {
         });
     }
 
+    updateCompletedCheckbox(e, todo) {
+        todo.completed = e.target.checked;
+        saveStorage();
+        this.loadTodos();
+    }
+
     renderTodo(todo) {
         const todoCard = document.createElement('div');
-        todoCard.className = 'todo-card';
+        todoCard.classList.add('todo-card');
 
-        const headingDiv = document.createElement('div');
-        const heading = document.createElement('h2');
-        headingDiv.appendChild(heading);
+        if (todo.completed) {
+            todoCard.classList.add('completed');  // Add class during render
+        }
+
+        const completed = document.createElement('input');
+        completed.setAttribute('type', 'checkbox');
+        completed.classList.add('todo-completed');
+        completed.classList.add(todo.completed);
+        completed.checked = todo.completed;
+        completed.addEventListener('change', (e) => {
+            this.updateCompletedCheckbox(e, todo);
+        })
+
+        const idDiv = document.createElement('div');
+        idDiv.classList.add('todo-id');
+        idDiv.textContent = todo.id;
+
+        const heading = document.createElement('div');
         heading.className = 'todo-title';
         heading.textContent = todo.text;
 
-        const dueDateDiv = document.createElement('div');
-        const dueDate = document.createElement('p');
+        const dueDate = document.createElement('div');
         dueDate.className = 'todo-due-date';
         dueDate.textContent = todo.dueDate.toString();
-        dueDateDiv.appendChild(dueDate);
 
-        const priorityDiv = document.createElement('div');
-        const priority = document.createElement('p');
+        const priority = document.createElement('div');
         priority.className = 'todo-priority';
         priority.classList.add(todo.priority);
         priority.textContent = todo.priority;
-        priorityDiv.appendChild(priority);
 
         const labelDiv = document.createElement('div');
+        labelDiv.classList.add('todo-labels');
         todo.labels.forEach(item => {
             const label = document.createElement('span');
             label.className = 'todo-label';
@@ -84,9 +90,11 @@ class TodoApp {
             labelDiv.appendChild(label);
         })
 
-        todoCard.appendChild(headingDiv);
-        todoCard.appendChild(dueDateDiv);
-        todoCard.appendChild(priorityDiv);
+        todoCard.appendChild(completed);
+        todoCard.appendChild(idDiv);
+        todoCard.appendChild(heading);
+        todoCard.appendChild(dueDate);
+        todoCard.appendChild(priority);
         todoCard.appendChild(labelDiv);
 
         return todoCard;

@@ -1,8 +1,25 @@
 /*Todo card*/
 .todo-card {
-    border: 1px solid black;
+    border: 1px solid #e8e8e8;
     padding: 10px;
     margin: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: baseline;
+    border-radius: 3px;
+}
+
+.completed {
+    opacity: 0.5;
+}
+
+.completed > * {
+    text-decoration: line-through;
+}
+
+.todo-id {
+    color: #979393;
 }
 
 .todo-title {
@@ -18,14 +35,49 @@
     border-radius: 5px;
 }
 
+.todo-due-date {
+    margin-left: auto;
+}
+
+.todo-priority {
+    width: 50px;
+}
+
 .todo-priority.high {
     color: red;
 }
 
-.todo-priority.medium {
+.todo-priority.med {
     color: orange;
 }
 
 .todo-priority.low {
     color: green;
+}
+
+.todo-labels {
+    width: 60px;
+}
+
+/*Task form*/
+dialog {
+    border: none;
+    width: 50%;
+    min-width: 400px;
+}
+
+.add-todo-form {
+    display: grid;
+}
+
+.add-todo-form > input {
+    margin-bottom: 10px;
+}
+
+.add-todo-form > fieldset {
+    margin-bottom: 10px;
+}
+
+.add-todo-form > button {
+    margin-bottom: 10px;
 }

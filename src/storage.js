@@ -13,15 +13,22 @@ function loadStorage() {
     const todoData = JSON.parse(localStorage.getItem("myTodos")) || [];
     todoArray = todoData.map(Todo.fromJSON);
 
-    if (todoArray.length === 0) {
-        todoArray = [
-            new Todo("Example todo", new Date(), "high", ["shopping", "work"], null),
-        ];
-        saveStorage();
-    }
+    // if (todoArray.length === 0) {
+    //     todoArray = [
+    //         new Todo("Example todo", new Date(), "high", ["shopping", "work"], null),
+    //     ];
+    //     saveStorage();
+    // }
 
     const projectData = JSON.parse(localStorage.getItem("myProjects")) || [];
     projectsArray = projectData.map(Project.fromJSON);
+
+    if (projectsArray.length === 0) {
+            projectsArray = [
+                new Project('Project test 1', '#247e9c'),
+            ];
+            saveStorage();
+        }
 }
 
 export {todoArray, projectsArray, saveStorage, loadStorage};
