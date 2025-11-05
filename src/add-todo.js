@@ -1,9 +1,10 @@
-import {saveStorage, todoArray} from "./storage";
+import {saveStorage, todoArray, projectsArray} from "./storage";
 import {Todo} from "./todo-note";
 
-function buildForm(onSubmitCallback) {
-    if (document.querySelector('.todo-dialog')) {
-        return document.querySelector('.todo-dialog');
+function buildForm(todoApp, preselectedProjectId = null) {
+    const existingDialog = document.querySelector('.todo-dialog');
+    if (existingDialog) {
+        existingDialog.remove();
     }
 
     const container = document.querySelector('main');
@@ -38,7 +39,6 @@ function buildForm(onSubmitCallback) {
     dateInput.type = 'date';
     dateInput.name = 'todo-date';
     dateInput.id = 'todo-date';
-    dateInput.valueAsDate = new Date();
     form.appendChild(dateInput);
 
     const fieldset = document.createElement('fieldset');
@@ -81,12 +81,36 @@ function buildForm(onSubmitCallback) {
     highPriorityLabel.textContent = 'High';
     fieldset.appendChild(highPriorityLabel);
 
+    const projectLabel = document.createElement('label');
+    projectLabel.setAttribute('for', 'todo-project');
+    projectLabel.textContent = 'Project';
+    form.appendChild(projectLabel);
+
+    const projectInput = document.createElement('select');
+    projectInput.name = 'todo-project';
+    projectInput.id = 'todo-project';
+    const defaultOption = document.createElement('option');
+    defaultOption.textContent = 'Choose a project...';
+    defaultOption.value = '';
+    projectInput.appendChild(defaultOption);
+    projectsArray.forEach(project => {
+        const option = document.createElement('option');
+        option.textContent = project.name;
+        option.value = project.id;
+        option.style.color = project.colour;
+        if (project.id === preselectedProjectId) {
+            option.selected = true;
+        }
+        projectInput.appendChild(option);
+    })
+    form.appendChild(projectInput);
+
     const submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
     submitBtn.className = 'add-todo-form-submit button-primary';
     submitBtn.textContent = 'Add task';
     submitBtn.addEventListener('click', (e) => {
-        handleSubmit(e, onSubmitCallback);
+        handleSubmit(e, todoApp);
     })
     form.appendChild(submitBtn);
 
@@ -111,7 +135,7 @@ function buildForm(onSubmitCallback) {
 }
 
 // TODO labels and project fields in form
-function handleSubmit(e, onSubmitCallback) {
+function handleSubmit(e, todoApp) {
     e.preventDefault();
     const form = e.target.closest('form');
     const formData = new FormData(form);
@@ -121,17 +145,16 @@ function handleSubmit(e, onSubmitCallback) {
         formData.get('todo-date'),
         formData.get('priority'),
         [],
-        null,
+        formData.get('todo-project'),
     );
     todoArray.push(newTodo);
     saveStorage();
 
+    todoApp.filterTodos(todoApp.currentFilter);
+    todoApp.loadTodos(todoApp.currentFilterArray);
+
     form.reset();
     form.closest('dialog').close();
-
-    if (onSubmitCallback) {
-        onSubmitCallback();
-    }
 }
 
 export { buildForm };

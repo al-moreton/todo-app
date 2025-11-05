@@ -1,6 +1,79 @@
-/*Todo card*/
+/*Main container*/
+body {
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    padding: 10px;
+    padding-left: 20px;
+    min-width: 200px;
+    height: 100vh;
+    background-color: #37353E;
+}
+
+.todo-app {
+    padding: 10px;
+    width: 100%;
+    background-color: #e8e8e8;
+}
+
+button {
+    border: none;
+    color: white;
+    padding: 10px 25px 10px 25px;
+    background-color: #065084;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0868ac;
+}
+
+/*Sidebar*/
+.sidebar h1 {
+    font-size: 2rem;
+    color: #D3DAD9;
+}
+
+.sidebar-group-heading  {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #D3DAD9;
+    margin: 5px 0 5px 0;
+}
+
+.tasks-sidebar {
+    margin-bottom: 25px;
+}
+
+.task-nav-item {
+    color: #D3DAD9;
+    cursor: pointer;
+}
+
+.projects-sidebar {
+    margin-bottom: 5px;
+}
+
+.project-nav-item {
+    color: #D3DAD9;
+    cursor: pointer;
+}
+
+/*task app*/
+.todo-heading {
+    display: flex;
+    flex-direction: row;
+}
+
+/*task card*/
 .todo-card {
-    border: 1px solid #e8e8e8;
+    border: 1px solid #715A5A;
     padding: 10px;
     margin: 10px;
     display: flex;
@@ -79,5 +152,9 @@ dialog {
 }
 
 .add-todo-form > button {
+    margin-bottom: 10px;
+}
+
+.add-todo-form > select {
     margin-bottom: 10px;
 }

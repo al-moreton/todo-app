@@ -13,19 +13,13 @@ function loadStorage() {
     const todoData = JSON.parse(localStorage.getItem("myTodos")) || [];
     todoArray = todoData.map(Todo.fromJSON);
 
-    // if (todoArray.length === 0) {
-    //     todoArray = [
-    //         new Todo("Example todo", new Date(), "high", ["shopping", "work"], null),
-    //     ];
-    //     saveStorage();
-    // }
-
     const projectData = JSON.parse(localStorage.getItem("myProjects")) || [];
     projectsArray = projectData.map(Project.fromJSON);
 
     if (projectsArray.length === 0) {
             projectsArray = [
-                new Project('Project test 1', '#247e9c'),
+                new Project('Default', '#247e9c'),
+                new Project('Default 2', '#94249c'),
             ];
             saveStorage();
         }

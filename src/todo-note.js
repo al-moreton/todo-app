@@ -17,6 +17,11 @@ class Todo {
         this.completed = false;
     }
 
+    getProjectName() {
+        const project = projectsArray.find(project => project.id === this.projectId);
+        return project ? project.name : 'No Project';
+    }
+
     getID() {
         return `TODO${(todoArray.length + 1).toString().padStart(3, '0')}`;
     }
