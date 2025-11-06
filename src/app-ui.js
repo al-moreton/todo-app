@@ -1,16 +1,17 @@
 import {todoArray, projectsArray, saveStorage, loadStorage} from './storage';
-import {Todo} from './todo-note';
 import {buildForm} from "./add-todo";
+import {bindEditTaskEvents} from './edit-task';
 
 class TodoApp {
     constructor() {
-        this.currentFilter = 'All';
+        this.currentFilter = 'all';
         this.currentFilterArray = todoArray;
         this.currentProjectId = null;
     }
 
     init() {
         loadStorage();
+        this.filterTodos('all');
         this.loadSidebar();
         this.loadTaskView();
     }
@@ -48,7 +49,7 @@ class TodoApp {
     loadTaskView() {
         const container = document.querySelector('.todo-app');
         const addTodoBtn = document.createElement('button');
-        addTodoBtn.textContent = 'Add Todo';
+        addTodoBtn.textContent = 'Add Task';
         addTodoBtn.addEventListener('click', (e) => {
             // TODO passing the old array as a callback, which means the new todo is not in there
             this.modal = buildForm(this, this.currentProjectId);
@@ -82,12 +83,13 @@ class TodoApp {
         this.loadTodos(this.currentFilterArray);
     }
 
+    // TODO set each field as an input so you can edit them
     renderTodo(todo) {
         const todoCard = document.createElement('div');
         todoCard.classList.add('todo-card');
 
         if (todo.completed) {
-            todoCard.classList.add('completed');  // Add class during render
+            todoCard.classList.add('completed');
         }
 
         const completed = document.createElement('input');
@@ -103,28 +105,39 @@ class TodoApp {
         idDiv.classList.add('todo-id');
         idDiv.textContent = todo.id;
 
-        const heading = document.createElement('div');
-        heading.className = 'todo-title';
-        heading.textContent = todo.text;
+        const heading = document.createElement('input');
+        heading.setAttribute('type', 'text');
+        heading.setAttribute('name', 'task-title');
+        heading.className = 'task-title';
+        heading.dataset.id = todo.id;
+        heading.value = todo.text;
 
-        const dueDate = document.createElement('div');
-        dueDate.className = 'todo-due-date';
-        dueDate.textContent = todo.dueDate.toString();
+        const dueDate = document.createElement('input');
+        dueDate.setAttribute('type', 'date');
+        dueDate.setAttribute('name', 'task-date');
+        dueDate.className = 'task-due-date';
+        dueDate.setAttribute('onkeydown', 'return false');
+        dueDate.dataset.id = todo.id;
+        dueDate.value = todo.dueDate;
 
         const priority = document.createElement('div');
         priority.className = 'todo-priority';
         priority.classList.add(todo.priority);
+        priority.dataset.id = todo.id;
         priority.textContent = todo.priority;
 
         const project = document.createElement('div');
-        project.className = 'todo-project';
+        project.className = 'task-project';
+        project.dataset.id = todo.id;
         project.textContent = todo.getProjectName();
 
         const labelDiv = document.createElement('div');
         labelDiv.classList.add('todo-labels');
+        labelDiv.dataset.id = todo.id;
         todo.labels.forEach(item => {
             const label = document.createElement('span');
             label.className = 'todo-label';
+            label.dataset.id = todo.id;
             label.textContent = String(item);
             labelDiv.appendChild(label);
         })
@@ -136,6 +149,8 @@ class TodoApp {
         todoCard.appendChild(priority);
         todoCard.appendChild(project);
         todoCard.appendChild(labelDiv);
+
+        bindEditTaskEvents(todoCard);
 
         return todoCard;
     }

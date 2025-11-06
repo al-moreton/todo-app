@@ -19,7 +19,9 @@ body {
 .todo-app {
     padding: 10px;
     width: 100%;
+    height: 100vh;
     background-color: #e8e8e8;
+    overflow: scroll;
 }
 
 button {
@@ -95,9 +97,13 @@ button:hover {
     color: #979393;
 }
 
-.todo-title {
-    font-size: 1.3rem;
+.task-title {
+    font-size: 1rem;
     margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 500px;
 }
 
 .todo-label {
@@ -108,7 +114,7 @@ button:hover {
     border-radius: 5px;
 }
 
-.todo-due-date {
+.task-due-date {
     margin-left: auto;
 }
 
@@ -128,8 +134,12 @@ button:hover {
     color: green;
 }
 
+.task-project {
+    width: 75px;
+}
+
 .todo-labels {
-    width: 60px;
+    width: 150px;
 }
 
 /*Task form*/
