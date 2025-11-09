@@ -47,6 +47,8 @@ class TodoApp {
                 taskBtns.forEach(btn => btn.classList.remove('active'));
                 projectBtns.forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
+                const projectName = projectsArray.find(project => project.id === this.currentProjectId);
+                document.querySelector('.todo-title').textContent = 'Project: ' + projectName.name;
             })
         })
     }
@@ -117,7 +119,9 @@ class TodoApp {
             projectsArray.push(newProject);
             saveStorage();
             addProjectDiv.remove();
-            this.loadSidebar();
+            this.renderProjectNav();
+            this.bindSidebarLinks();
+            this.updateTaskCounts();
         })
         buttonDiv.appendChild(saveProjectBtn);
         const cancelProjectBtn = document.createElement('button');
@@ -141,6 +145,39 @@ class TodoApp {
         });
 
         this.loadTodos();
+    }
+
+    updateProjectDeleteBtn() {
+        const buttonDiv = document.querySelector('.task-add-div');
+        const existingBtn = buttonDiv.querySelector('.delete-project-btn');
+
+        if (existingBtn) {
+            existingBtn.remove();
+        }
+
+        if (this.currentFilter !== 'all' && this.currentFilter !== 'today' && this.currentFilter !== 'tomorrow' && this.currentFilter !== 'completed') {
+            const deleteProjectBtn = document.createElement('button');
+            deleteProjectBtn.classList.add('delete-project-btn');
+            deleteProjectBtn.classList.add('btn-secondary');
+            deleteProjectBtn.textContent = 'Delete project';
+            deleteProjectBtn.dataset.id = this.currentFilter;
+            deleteProjectBtn.addEventListener('click', (e) => {
+                const project = projectsArray.findIndex(project => project.id === e.target.dataset.id);
+                const tasks = todoArray.filter(task => task.projectId === e.target.dataset.id);
+                tasks.forEach(task => {
+                    task.projectId = null;
+                })
+                projectsArray.splice(project, 1);
+                saveStorage();
+                this.currentFilter = 'all';
+                this.filterTodos('all');
+                this.renderProjectNav();
+                this.bindSidebarLinks();
+                this.loadTodos(this.currentFilterArray);
+                document.querySelector('.task-nav-item').classList.add('active');
+            });
+            buttonDiv.appendChild(deleteProjectBtn);
+        }
     }
 
     loadTodos(array = todoArray) {
@@ -169,6 +206,7 @@ class TodoApp {
         }
 
         this.updateTaskCounts();
+        this.updateProjectDeleteBtn();
     }
 
     updateCompletedCheckbox(e, todo) {
@@ -227,13 +265,9 @@ class TodoApp {
         mainDiv.appendChild(heading);
         mainDiv.appendChild(projectColourText);
 
-        const dueDate = document.createElement('input');
-        dueDate.setAttribute('type', 'date');
-        dueDate.setAttribute('name', 'task-date');
+        const dueDate = document.createElement('div');
         dueDate.className = 'task-due-date';
-        dueDate.setAttribute('onkeydown', 'return false');
-        dueDate.dataset.id = todo.id;
-        dueDate.value = todo.dueDate;
+        dueDate.textContent = todo.dueDate;
 
         const priority = document.createElement('div');
         priority.className = 'todo-priority';
@@ -242,6 +276,8 @@ class TodoApp {
         priority.textContent = todo.priority;
 
         projectColourText.appendChild(priority);
+
+        projectColourText.appendChild(dueDate);
 
         const labelDiv = document.createElement('div');
         labelDiv.classList.add('todo-labels');
@@ -272,12 +308,8 @@ class TodoApp {
         })
 
         todoCard.appendChild(completed);
-        // todoCard.appendChild(idDiv);
         todoCard.appendChild(mainDiv);
-        todoCard.appendChild(dueDate);
         todoCard.appendChild(deleteButton);
-        // todoCard.appendChild(priority);
-        // todoCard.appendChild(labelDiv);
 
         bindEditTaskEvents(todoCard);
 

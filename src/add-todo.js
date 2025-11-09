@@ -105,6 +105,9 @@ function buildForm(todoApp, preselectedProjectId = null) {
     })
     form.appendChild(projectInput);
 
+    const buttonDiv = document.createElement('div');
+    buttonDiv.classList.add('form-button-div');
+
     const submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
     submitBtn.className = 'add-todo-form-submit button-primary';
@@ -112,11 +115,11 @@ function buildForm(todoApp, preselectedProjectId = null) {
     submitBtn.addEventListener('click', (e) => {
         handleSubmit(e, todoApp);
     })
-    form.appendChild(submitBtn);
+    buttonDiv.appendChild(submitBtn);
 
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
-    closeBtn.className = 'add-todo-form-close';
+    closeBtn.className = 'add-todo-form-close btn-secondary';
     closeBtn.textContent = 'Close';
     closeBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -124,7 +127,9 @@ function buildForm(todoApp, preselectedProjectId = null) {
         form.reset();
         form.closest('dialog').close();
     })
-    form.appendChild(closeBtn);
+    buttonDiv.appendChild(closeBtn);
+
+    form.appendChild(buttonDiv);
 
     dialog.appendChild(formTitle);
     dialog.appendChild(form);
