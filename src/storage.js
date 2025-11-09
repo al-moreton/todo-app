@@ -18,8 +18,7 @@ function loadStorage() {
 
     if (projectsArray.length === 0) {
             projectsArray = [
-                new Project('Default', '#247e9c'),
-                new Project('Default 2', '#94249c'),
+                new Project('Default project', '#247e9c'),
             ];
             saveStorage();
         }

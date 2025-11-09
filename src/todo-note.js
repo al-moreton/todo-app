@@ -22,6 +22,11 @@ class Todo {
         return project ? project.name : 'No Project';
     }
 
+    getProjectColour() {
+        const project = projectsArray.find(project => project.id === this.projectId);
+        return project ? project.colour : 'No Project';
+    }
+
     getID() {
         return `TODO${(todoArray.length + 1).toString().padStart(3, '0')}`;
     }

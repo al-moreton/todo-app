@@ -1,5 +1,5 @@
 class Project {
-  constructor(name, colour, todo = []) {
+  constructor(name, colour = '#000000', todo = []) {
     this.id = crypto.randomUUID();
     this.name = name;
     this.colour = colour;
