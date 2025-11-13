@@ -8,7 +8,7 @@ class Todo {
         labels = [],
         projectId = null,
     ) {
-        this.id = this.getID();
+        this.id = crypto.randomUUID();
         this.text = text;
         this.dueDate = dueDate;
         this.priority = priority;
@@ -25,10 +25,6 @@ class Todo {
     getProjectColour() {
         const project = projectsArray.find(project => project.id === this.projectId);
         return project ? project.colour : 'No Project';
-    }
-
-    getID() {
-        return `TODO${(todoArray.length + 1).toString().padStart(3, '0')}`;
     }
 
     toJSON() {

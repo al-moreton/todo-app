@@ -57,155 +57,6 @@ button:hover {
     color: white;
 }
 
-/*Sidebar*/
-.sidebar h1 {
-    font-size: 1.8rem;
-    color: #1f2937;
-    margin-top: 10px;
-}
-
-.sidebar-group-heading  {
-    color: #6b7280;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 0.8rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.add-project-sidebar-btn {
-    background: none;
-    color: #9ca3af;
-    width: 30px;
-    padding: 0;
-    height: 30px;
-    font-weight: 600;
-    margin-right: 5px;
-    border: none;
-}
-
-.add-project-sidebar-btn:hover {
-    background: none;
-}
-
-.tasks-sidebar {
-    margin-bottom: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.task-nav-item {
-    color: #1f2937;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.task-nav-item span {
-    pointer-events: none;
-}
-
-.task-nav-count {
-    color: #2563eb;
-    background-color: #dbeafe;
-    border-radius: 5px;
-    padding: 5px;
-    pointer-events: none;
-}
-
-.projects-sidebar {
-    margin-bottom: 5px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.project-nav-item {
-    color: #1f2937;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.project-colour-text-div {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    pointer-events: none;
-}
-
-.project-colour-text-div span {
-    pointer-events: none;
-}
-
-.project-colour {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.project-nav-count {
-    color: #2563eb;
-    background-color: #dbeafe;
-    border-radius: 5px;
-    padding: 5px;
-    pointer-events: none;
-}
-
-.active {
-    color: rgb(37 99 235);
-    background-color: rgb(239 246 255);
-}
-
-.add-project-div {
-    padding: 15px;
-    background-color: #f9fafb;
-    border-radius: 5px;
-    margin-top: -15px;
-}
-
-.add-project-colour-input-div {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.add-project-name-input {
-    width: 70%;
-}
-
-.add-project-colour-input {
-    width: 30%;
-}
-
-.add-project-button-div {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-.add-project-button-div button {
-    padding: 5px 10px 5px 10px;
-    width: 50%;
-}
-
-.add-project-cancel-btn {
-    background-color: #374151;
-}
-
 /*task app*/
 .todo-heading {
     /*display: flex;*/
@@ -220,6 +71,15 @@ button:hover {
     font-size: 2.2rem;
     font-weight: bold;
     margin-bottom: 20px;
+}
+
+.todo-title i {
+    margin-left: 10px;
+    width: 10px;
+    font-size: 1.2rem;
+    bottom: -3px;
+    position: relative;
+    cursor: pointer;
 }
 
 .task-add-div {
@@ -252,10 +112,15 @@ button:hover {
     white-space: nowrap;
     overflow: hidden;
     overflow-x: scroll;
+    cursor: pointer;
 }
 
 .completed {
     /*text-decoration: line-through;*/
+}
+
+.todo-completed-div {
+    padding: 10px;
 }
 
 .todo-completed {
@@ -278,11 +143,12 @@ button:hover {
     flex-direction: column;
     gap: 10px;
     width: 100%;
+    /*cursor: pointer;*/
 }
 
 .task-card-main-div .project-colour {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
 }
 
 .task-card-main-div .project-colour-text-div {
@@ -290,6 +156,21 @@ button:hover {
     gap: 5px;
     color: #6b7280;
 }
+
+.project-colour-text-div div:before {
+    content: "/";
+    color: #6b7280;
+    /*border-left: 1px solid black;*/
+    padding-right: 5px;
+}
+
+.project-colour-text-div div:first-child:before, .project-colour-text-div div:nth-child(2):before {
+    content: unset;
+    border-left: none;
+    padding-left: 0;
+}
+
+
 
 /*.completed > * {*/
 /*    text-decoration: line-through;*/
@@ -308,7 +189,7 @@ button:hover {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    /*min-width: 500px;*/
+    cursor: pointer;
 }
 
 .todo-label {
@@ -322,13 +203,9 @@ button:hover {
 .task-due-date {
     background: none;
     border: none;
-    color: #374151;
+    color: #6b7280;
     font-size: 0.8rem;
     /*align-self: self-start;*/
-}
-
-.todo-priority {
-    /*width: 50px;*/
 }
 
 .todo-priority.high {
@@ -367,31 +244,4 @@ button:hover {
 
 .delete-button:hover {
     background: none;
-}
-
-/*Task form*/
-dialog {
-    border: none;
-    width: 50%;
-    min-width: 400px;
-}
-
-.add-todo-form {
-    display: grid;
-}
-
-.add-todo-form > input {
-    margin-bottom: 10px;
-}
-
-.add-todo-form > fieldset {
-    margin-bottom: 10px;
-}
-
-.add-todo-form > button {
-    margin-bottom: 10px;
-}
-
-.add-todo-form > select {
-    margin-bottom: 10px;
 }

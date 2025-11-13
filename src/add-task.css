@@ -1,0 +1,88 @@
+/*Task form*/
+dialog {
+    border: none;
+    width: 250px;
+    min-width: 400px;
+    border-radius: 5px;
+    padding: 20px;
+    /*background-color: #f9fafb;*/
+}
+
+.form-title {
+    font-size: 1.5rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.form-intro {
+    margin-bottom: 20px;
+}
+
+.add-todo-form {
+    display: grid;
+}
+
+.add-todo-form label {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.form-legend {
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding-left: 0;
+}
+
+fieldset {
+    padding-left: 0;
+    border: none;
+}
+
+.add-todo-form > input {
+    margin-bottom: 12px;
+    margin-top: 5px;
+    border-radius: 2px;
+    border: 1px solid #6b7280;
+    padding: 5px;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.add-todo-form > fieldset {
+    /*margin-bottom: 12px;*/
+}
+
+fieldset > label {
+    font-weight: 300 !important;
+    margin-right: 15px;
+}
+
+.add-todo-form > button {
+    margin-bottom: 10px;
+}
+
+.add-todo-form-close {
+    margin-right: 0;
+}
+
+.add-todo-form > select {
+    margin-bottom: 30px;
+    margin-top: 5px;
+    border-radius: 2px;
+    border: 1px solid #6b7280 !important;
+    padding: 5px;
+    color: #374151;
+    font-size: 0.9rem !important;
+}
+
+.form-button-div {
+    text-align: right;
+}
+
+.add-todo-form-close {
+    margin-right: 10px;
+}
+
+.add-todo-form-submit {
+    margin-right: 0px;
+}

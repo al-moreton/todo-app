@@ -1,8 +1,15 @@
 import {todoArray, projectsArray, saveStorage, loadStorage} from './storage';
 import {buildForm} from "./add-todo";
-import {bindEditTaskEvents} from './edit-task';
+import {loadEditTask} from './edit-task';
 import {Project} from "./project";
+import {editProject} from './edit-project';
 
+// TODO populate date if adding task from today/tomorrow
+// TODO add sorting function
+// TODO when ticking off tasks, move out of view, but with a delay
+// TODO add transition effects to things
+// TODO edit tasks inline
+// TODO edit project name/colour
 class TodoApp {
     constructor() {
         this.currentFilter = 'all';
@@ -21,6 +28,25 @@ class TodoApp {
         this.renderProjectNav();
         this.bindSidebarLinks();
         this.bindAddProjectBtn();
+    }
+
+    updateHeader() {
+        const todoTitle = document.querySelector('.todo-title')
+        if (this.currentFilter !== 'all' && this.currentFilter !== 'today' && this.currentFilter !== 'tomorrow' && this.currentFilter !== 'completed') {
+            const project = projectsArray.find(project => project.id === this.currentFilter);
+            todoTitle.textContent = 'Project: ' + project.name;
+            const icon = document.createElement('i');
+            icon.className = 'fa-solid fa-pen-to-square fa-2xs';
+            icon.style.color = '#6b7280';
+            icon.dataset.id = this.currentFilter;
+            todoTitle.appendChild(icon);
+            icon.addEventListener('click', (e) => {
+                this.modal = editProject(e.target.dataset.id, this);
+                this.modal.showModal();
+            })
+        } else {
+            todoTitle.textContent = this.currentFilter.charAt(0).toUpperCase() + this.currentFilter.slice(1);
+        }
     }
 
     bindSidebarLinks() {
@@ -47,8 +73,6 @@ class TodoApp {
                 taskBtns.forEach(btn => btn.classList.remove('active'));
                 projectBtns.forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
-                const projectName = projectsArray.find(project => project.id === this.currentProjectId);
-                document.querySelector('.todo-title').textContent = 'Project: ' + projectName.name;
             })
         })
     }
@@ -65,6 +89,12 @@ class TodoApp {
     }
 
     renderProjectNav() {
+        document.querySelector('.sidebar').addEventListener('mouseover', e => {
+            document.querySelector('.add-project-sidebar-btn').style.visibility = 'visible';
+        })
+        document.querySelector('.sidebar').addEventListener('mouseout', e => {
+            document.querySelector('.add-project-sidebar-btn').style.visibility = 'hidden';
+        })
         const projectsSidebar = document.querySelector('.projects-sidebar');
         const projectBtns = document.querySelectorAll('.project-nav-item');
         projectBtns.forEach(btn => {
@@ -139,7 +169,6 @@ class TodoApp {
     loadTaskView() {
         const addTodoBtn = document.querySelector('.task-add-button')
         addTodoBtn.addEventListener('click', (e) => {
-            // TODO passing the old array as a callback, which means the new todo is not in there
             this.modal = buildForm(this, this.currentProjectId);
             this.modal.showModal();
         });
@@ -181,9 +210,6 @@ class TodoApp {
     }
 
     loadTodos(array = todoArray) {
-        const title = document.querySelector('.todo-title');
-        title.textContent = this.currentFilter.charAt(0).toUpperCase() + this.currentFilter.slice(1);
-
         const todoList = document.querySelector(".todo-list");
         const todoCards = document.querySelectorAll(".todo-card");
         todoCards.forEach((card) => card.remove());
@@ -207,6 +233,7 @@ class TodoApp {
 
         this.updateTaskCounts();
         this.updateProjectDeleteBtn();
+        this.updateHeader();
     }
 
     updateCompletedCheckbox(e, todo) {
@@ -215,13 +242,26 @@ class TodoApp {
         this.loadTodos(this.currentFilterArray);
     }
 
+    // TODO DELETE BUTTON NOT WORKING!
+
     renderTodo(todo) {
         const todoCard = document.createElement('div');
         todoCard.classList.add('todo-card');
+        todoCard.dataset.id = todo.id;
+        todoCard.addEventListener('click', (e) => {
+            if (e.target.classList.contains('todo-completed') || e.target.closest('.delete-button')) {
+                return;
+            }
+            this.modal = buildForm(this, null, todoCard.dataset.id);
+            this.modal.showModal();
+        })
 
         if (todo.completed) {
             todoCard.classList.add('completed');
         }
+
+        const completedDiv = document.createElement('div');
+        completedDiv.classList.add('todo-completed-div');
 
         const completed = document.createElement('input');
         completed.setAttribute('type', 'checkbox');
@@ -231,6 +271,7 @@ class TodoApp {
         completed.addEventListener('change', (e) => {
             this.updateCompletedCheckbox(e, todo);
         })
+        completedDiv.appendChild(completed);
 
         const idDiv = document.createElement('div');
         idDiv.classList.add('todo-id');
@@ -238,16 +279,22 @@ class TodoApp {
 
         const mainDiv = document.createElement('div');
         mainDiv.classList.add('task-card-main-div');
+        mainDiv.dataset.id = todo.id;
+        mainDiv.addEventListener('click', (e) => {
+            // loadEditTask(e.target.dataset.id);
+        })
 
-        const heading = document.createElement('input');
-        heading.setAttribute('type', 'text');
-        heading.setAttribute('name', 'task-text');
+        const heading = document.createElement('div');
         heading.className = 'task-title';
         heading.dataset.id = todo.id;
-        heading.value = todo.text;
+        heading.textContent = todo.text;
 
         const projectColourText = document.createElement('div');
         projectColourText.classList.add('project-colour-text-div');
+
+        const slash = document.createElement('div');
+        slash.classList.add('task-slash');
+        slash.textContent = '/';
 
         if (todo.getProjectColour() !== 'No Project') {
             const projectColour = document.createElement('div');
@@ -260,7 +307,11 @@ class TodoApp {
         project.className = 'task-project';
         project.dataset.id = todo.id;
         project.textContent = todo.getProjectName();
-        projectColourText.appendChild(project);
+
+        if (todo.getProjectColour() !== 'No Project') {
+            projectColourText.appendChild(project);
+            // projectColourText.appendChild(slash);
+        }
 
         mainDiv.appendChild(heading);
         mainDiv.appendChild(projectColourText);
@@ -275,9 +326,14 @@ class TodoApp {
         priority.dataset.id = todo.id;
         priority.textContent = todo.priority;
 
-        projectColourText.appendChild(priority);
-
-        projectColourText.appendChild(dueDate);
+        if (todo.priority) {
+            // projectColourText.appendChild(slash.cloneNode(true));
+            projectColourText.appendChild(priority);
+        }
+        if (todo.dueDate) {
+            // projectColourText.appendChild(slash.cloneNode(true));
+            projectColourText.appendChild(dueDate);
+        }
 
         const labelDiv = document.createElement('div');
         labelDiv.classList.add('todo-labels');
@@ -289,7 +345,9 @@ class TodoApp {
             label.textContent = String(item);
             labelDiv.appendChild(label);
         })
-        projectColourText.appendChild(labelDiv);
+        if (todo.labels.length > 0) {
+            projectColourText.appendChild(labelDiv);
+        }
 
         const deleteButton = document.createElement('button');
         deleteButton.setAttribute('type', 'button');
@@ -297,9 +355,12 @@ class TodoApp {
         deleteButton.dataset.id = todo.id;
         const icon = document.createElement('i');
         icon.className = 'fa-solid fa-trash fa-xl';
+        icon.dataset.id = todo.id;
         deleteButton.appendChild(icon);
         deleteButton.addEventListener('click', (e) => {
-            const index = todoArray.find(task => e.target.dataset.id === task.id)
+            e.stopPropagation();
+            const taskId = deleteButton.dataset.id;
+            const index = todoArray.findIndex(task => task.id === taskId);
             if (index !== -1) {
                 todoArray.splice(index, 1);
                 saveStorage();
@@ -307,11 +368,9 @@ class TodoApp {
             }
         })
 
-        todoCard.appendChild(completed);
+        todoCard.appendChild(completedDiv);
         todoCard.appendChild(mainDiv);
         todoCard.appendChild(deleteButton);
-
-        bindEditTaskEvents(todoCard);
 
         return todoCard;
     }
@@ -344,7 +403,6 @@ class TodoApp {
             default:
                 const project = projectsArray.find(project => project.id === filter);
                 this.currentFilter = project.id;
-                // Filter by project ID
                 this.currentFilterArray = todoArray.filter(todo => todo.projectId === filter);
                 break;
         }
