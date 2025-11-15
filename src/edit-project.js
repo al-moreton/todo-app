@@ -79,11 +79,9 @@ function handleSubmit(e, todoApp) {
 
     saveStorage();
 
-    console.log(todoApp.currentFilter);
-
+    todoApp.loadSidebar();
     todoApp.filterTodos(todoApp.currentFilter);
     todoApp.loadTodos(todoApp.currentFilterArray);
-    todoApp.loadSidebar();
     const todoTitle = document.querySelector('.todo-title')
     todoTitle.textContent = 'Project: ' + project.name;
     const navItem = document.querySelector(`.project-nav-item[data-filter="${project.id}"]`);

@@ -242,7 +242,26 @@ class TodoApp {
         this.loadTodos(this.currentFilterArray);
     }
 
-    // TODO DELETE BUTTON NOT WORKING!
+    isTaskOverDue(dueDate) {
+        const date = new Date(dueDate.textContent).setHours(0, 0, 0, 0);
+        const todayDate = new Date().setHours(0, 0, 0, 0);
+        const tomorrowDate = new Date(Date.now() + 86400000).setHours(0, 0, 0, 0);
+        const sevenDays = new Date(Date.now() + (86400000 * 7)).setHours(0, 0, 0, 0);
+
+        if (!date) {
+            return;
+        }
+
+        if (date === todayDate) {
+            dueDate.style.color = 'green';
+        } else if (date === tomorrowDate) {
+            dueDate.style.color = 'brown';
+        } else if (date < todayDate) {
+            dueDate.style.color = 'red';
+        } else if (date > tomorrowDate && date < sevenDays) {
+            dueDate.style.color = 'purple';
+        }
+    }
 
     renderTodo(todo) {
         const todoCard = document.createElement('div');
@@ -319,6 +338,8 @@ class TodoApp {
         const dueDate = document.createElement('div');
         dueDate.className = 'task-due-date';
         dueDate.textContent = todo.dueDate;
+
+        this.isTaskOverDue(dueDate);
 
         const priority = document.createElement('div');
         priority.className = 'todo-priority';
