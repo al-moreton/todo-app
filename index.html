@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Todo app</title>
+    <script src="https://kit.fontawesome.com/caa061f740.js" crossorigin="anonymous"></script>
+<script defer src="main.js"></script></head>
+
+<body>
+<main class="container">
+    <div class="sidebar">
+        <h1>
+            Todo App
+        </h1>
+        <div class="tasks-sidebar">
+            <div class="task-nav-item active" data-filter="all">
+                <i class="fa-solid fa-globe"></i>
+                <span data-filter="all">All</span>
+                <span class="task-nav-count" data-filter="all">0</span>
+            </div>
+            <div class="task-nav-item" data-filter="today">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span data-filter="today">Today</span>
+                <span class="task-nav-count" data-filter="today">0</span>
+            </div>
+            <div class="task-nav-item" data-filter="tomorrow">
+                <i class="fa-solid fa-calendar-week"></i>
+                <span data-filter="tomorrow">Tomorrow</span>
+                <span class="task-nav-count" data-filter="tomorrow">0</span>
+            </div>
+            <div class="task-nav-item" data-filter="completed">
+                <i class="fa-solid fa-check-double"></i>
+                <span data-filter="completed">Completed</span>
+                <span class="task-nav-count" data-filter="completed">0</span>
+            </div>
+        </div>
+        <div class="projects-sidebar">
+            <div class="sidebar-group-heading">
+                My Projects
+                <button class="add-project-sidebar-btn"><i class="fa-solid fa-plus fa-lg"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="todo-app">
+        <div class="todo-heading">
+            <h1>
+                Todo app
+            </h1>
+        </div>
+        <div class="todo-title">
+            All
+        </div>
+        <div class="task-add-div">
+            <button type="button" class="task-add-button btn btn-primary">Add task</button>
+        </div>
+        <div class="todo-list">
+
+        </div>
+    </div>
+</main>
+<footer></footer>
+</body>
+</html>
